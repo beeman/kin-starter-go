@@ -1,9 +1,9 @@
 package main
 
 import (
-	"kin-starter-go/kinsdk"
 	"context"
 	"fmt"
+	"github.com/kintegrate/kin-starter-go/kinsdk"
 	"log"
 	"time"
 
@@ -28,9 +28,9 @@ func main() {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("🔑 Public Key Alice    %s", privateKeyAlice.Public().Base58())
+	fmt.Printf("🔑 Public Key Alice    %s\n", privateKeyAlice.Public().Base58())
 	for _, tokenAccount := range tokenAccountsAlice {
-		fmt.Printf("🗝  Token Account Alice %s", tokenAccount.Base58())
+		fmt.Printf("🗝  Token Account Alice %s\n", tokenAccount.Base58())
 	}
 
 	privateKeyBob, err := kinsdk.GenerateKey()
@@ -43,32 +43,32 @@ func main() {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("🔑 Public Key Bob    %s", privateKeyBob.Public().Base58())
+	fmt.Printf("🔑 Public Key Bob    %s\n", privateKeyBob.Public().Base58())
 	for _, tokenAccount := range tokenAccountsBob {
-		fmt.Printf("🗝  Token Account Bob %s", tokenAccount.Base58())
+		fmt.Printf("🗝  Token Account Bob %s\n", tokenAccount.Base58())
 	}
 
 	// Helper method to sleep a bit, then print balance of Alice and Bob
 	sleepAndPrintBalances := func() {
-		fmt.Printf("😴 Sleeping for a bit...")
+		fmt.Printf("😴 Sleeping for a bit...\n")
 		time.Sleep(15 * time.Second)
-		balanceAlice, err:= k.GetBalance(context.Background(), privateKeyAlice.Public())
-		fmt.Printf("👛 Balance for Alice:  %x Kin, err: %v", balanceAlice, err)
-		balanceBob, err:= k.GetBalance(context.Background(), privateKeyBob.Public())
-		fmt.Printf("👛 Balance for Bob:    %x Kin, err: %v", balanceBob, err)
+		balanceAlice, _:= k.GetBalance(context.Background(), privateKeyAlice.Public())
+		fmt.Printf("👛 Balance for Alice:  %d Kin\n", balanceAlice)
+		balanceBob, _:= k.GetBalance(context.Background(), privateKeyBob.Public())
+		fmt.Printf("👛 Balance for Bob:    %d Kin\n", balanceBob)
 	}
 
 	sleepAndPrintBalances()
 
-	fmt.Printf("🙏 Request Airdrop for Alice")
+	fmt.Printf("🙏 Request Airdrop for Alice\n")
 	k.RequestAirdrop(context.Background(), tokenAccountsAlice[0], "10")
 
-	fmt.Printf("🙏 Request Airdrop for Bob")
+	fmt.Printf("🙏 Request Airdrop for Bob\n")
 	k.RequestAirdrop(context.Background(), tokenAccountsBob[0], "10")
 
 	sleepAndPrintBalances()
 
-	fmt.Printf("💸 Submit P2P Payment from Alice to Bob")
+	fmt.Printf("💸 Submit P2P Payment from Alice to Bob\n")
 	k.SubmitP2P(context.Background(), privateKeyAlice, privateKeyBob.Public(), "2", "My demo payment")
 
 	sleepAndPrintBalances()
